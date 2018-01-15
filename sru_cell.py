@@ -6,7 +6,8 @@ from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import init_ops
 from tensorflow.python.ops import variable_scope as vs
-'''most of code are from  https://github.com/flrngel/sru-tensorflow/blob/master/sru.py'''
+'''most of code are from  https://github.com/flrngel/sru-tensorflow/blob/master/sru.py, 
+   and use GRUCell format in "tensorflow.python.ops.rnn_cell_impl.py"'''
 
 class SRUCell(RNNCell):
   """Simple recurrent unit cell.
@@ -82,6 +83,7 @@ class SRUCell(RNNCell):
     # but the shape of "(1-r)" and "inputs" are not match, so if you
     # use "new_h = r * self._activation(new_c)+(1-r)*inputs", then
     # it will raise "ValueError: Dimensions must be equal..."
+    # the idea come from https://github.com/xylcbd/tensorflow_mnist_sru/blob/master/sru.py
     new_h = r * self._activation(new_c)
 
     return new_h, new_c
