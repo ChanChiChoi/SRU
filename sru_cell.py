@@ -53,29 +53,33 @@ class SRUCell(RNNCell):
     sigmoid = math_ops.sigmoid
     # Parameters of gates are concatenated into one multiply for efficiency.
     c = state
-    if self._gate_linear is None:
-      bias_ones = self._bias_initializer
-      if self._bias_initializer is None:
-        bias_ones = init_ops.constant_initializer(1.0, dtype=inputs.dtype)
-      with vs.variable_scope("gates"):  # Reset gate and update gate.
-        self._gate_linear = _Linear(
-            [inputs],
-            3 * self._num_units,
-            True,
-            bias_initializer=bias_ones,
-            kernel_initializer=self._kernel_initializer)
+
+    if self._bias_initializer is None:
+      bias_ones = init_ops.constant_initializer(1.0, dtype=inputs.dtype)
+
+    with vs.variable_scope(scope or type(self).__name__):
+      self._gate_linear = _Linear(
+          [inputs],
+          3 * self._num_units,
+          False,
+          None,
+          kernel_initializer=self._kernel_initializer)
+
+      #add the biases
+      b_f = vs.get_variable('b_f', [self._num_units],initializer=bias_ones)
+      b_r = vs.get_variable('b_r', [self._num_units],initializer=bias_ones)
 
     x, f, r = array_ops.split(
-        value=self._gate_linear([inputs]), num_or_size_splits=3, axis=1)
-    f = sigmoid(f)
-    r = sigmoid(r)
-    new_c = (
-        (c * f) + ((1 - f) * x))
+          value=self._gate_linear([inputs]), num_or_size_splits=3, axis=1)
+
+    f = sigmoid(f + b_f)
+    r = sigmoid(r + b_r)
+
+    new_c = f * c + (1 - f) * x
     # here should be new_h = r * self._activation(new_c)+(1-r)*inputs
     # but the shape of "(1-r)" and "inputs" are not match, so if you
     # use "new_h = r * self._activation(new_c)+(1-r)*inputs", then
     # it will raise "ValueError: Dimensions must be equal..."
-    # the idea come from https://github.com/xylcbd/tensorflow_mnist_sru/blob/master/sru.py
     new_h = r * self._activation(new_c)
 
     return new_h, new_c
