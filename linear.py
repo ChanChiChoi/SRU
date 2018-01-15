@@ -1,4 +1,4 @@
-"""_Linear class from 'tensorflow.python.ops.rnn_cell.py'
+"""_Linear class from 'tensorflow/python/ops/rnn_cell_impl.py'
 """
 
 from tensorflow.python.ops import init_ops
