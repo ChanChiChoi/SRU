@@ -16,12 +16,9 @@ class SRUCell(RNNCell):
 
   def __init__(self, num_units,
                 activation=None, reuse=None):
-    """Initialize the basic LSTM cell.
+    """Initialize the basic SRU cell.
     Args:
       num_units: int, The number of units in the LSTM cell.
-      state_is_tuple: If True, accepted and returned states are 2-tuples of
-        the `c_state` and `m_state`.  If False, they are concatenated
-        along the column axis.  The latter behavior will soon be deprecated.
       activation: Activation function of the inner states.  Default: `tanh`.
       reuse: (optional) Python boolean describing whether to reuse variables
         in an existing scope.  If not `True`, and the existing scope already has
@@ -49,14 +46,9 @@ class SRUCell(RNNCell):
     """Single recurrent unit cell (SRU).
     Args:
       inputs: `2-D` tensor with shape `[batch_size x input_size]`.
-      state: An `LSTMStateTuple` of state tensors, each shaped
-        `[batch_size x self.state_size]`, if `state_is_tuple` has been set to
-        `True`.  Otherwise, a `Tensor` shaped
-        `[batch_size x 2 * self.state_size]`.
+      state: `2-D` tensor with shape `[batch_size x _num_units]`
     Returns:
-      A pair containing the new hidden state, and the new state (either a
-        `LSTMStateTuple` or a concatenated state, depending on
-        `state_is_tuple`).
+      A pair containing the new hidden state, and the new state.
     """
     sigmoid = math_ops.sigmoid
     # Parameters of gates are concatenated into one multiply for efficiency.
