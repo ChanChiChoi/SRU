@@ -1,8 +1,7 @@
 # SRU
 Training RNNs as fast as CNNs，SRU implementatiom by tensorflow 1.4.1
 
-I just implemented the sru code, it can run, but i have not optimizated the speed
-
+I just implemented the sru code, it can run, but i have not optimizated the speed. when comparing SRU and GRU on tensorflow, SRU was not better than GRU.
 
 refences:
 
