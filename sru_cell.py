@@ -6,7 +6,7 @@ from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import init_ops
 from tensorflow.python.ops import variable_scope as vs
-'''most of code are from  '''
+'''most of code are from  https://github.com/flrngel/sru-tensorflow/blob/master/sru.py'''
 
 class SRUCell(RNNCell):
   """Simple recurrent unit cell.
@@ -32,10 +32,10 @@ class SRUCell(RNNCell):
 
     self._num_units = num_units
     self._activation = activation or math_ops.tanh
-    self._linear = None
     self._gate_linear = None
     self._bias_initializer = None
     self._kernel_initializer = None
+    
   @property
   def state_size(self):
     return self._num_units
